@@ -1,0 +1,14 @@
+#!/bin/sh
+
+HOST="VPN_IP_GATEWAY"
+DELAY="300"
+
+while [ 1 ]; do
+	ping -I tun-ssp -c 3 $HOST >/dev/null 2>&1
+	ERR=$?
+	if [ "$ERR" -ne "0" ]; then
+		logger "ALERTA: Reiniciando VPN SSP"
+		systemctl stop openvpn-client@vpn-soporte.service && systemctl start openvpn-client@vpn-soporte.service
+	fi
+	sleep $DELAY
+done
