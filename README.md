@@ -4,7 +4,7 @@ Script para descargar .ovpn de PfSense a equipos linux
 
 ## **Instalación** 🔧
 
-* Para instalar openvpn el el equipo linux
+* Para instalar openvpn en equipo linux
 
 ```bash
 git clone https://github.com/avillalba96/script-altacertificadovpn.git && cd "$(basename "$_" .git)" && ./altaopenvpn
