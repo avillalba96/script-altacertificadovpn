@@ -46,11 +46,11 @@ if [[ $VPN -eq 0 ]]; then
         clear
         echo -e "\e[1;33m[VPN]: \e[0mRevisar salida https://$SITE:$PORT para descargar el certificado\e[0m"
 else
-        wget -qO- --keep-session-cookies --no-check-certificate --save-cookies /tmp/pfsense_cookies.txt \
+        wget -qO- --keep-session-cookies --save-cookies /tmp/pfsense_cookies.txt \
                 --no-check-certificate https://"$SITE":"$PORT"/system_certmanager.php |
                 grep "name='__csrf_magic'" | sed 's/.*value="\(.*\)".*/\1/' >/tmp/pfsense_csrf.txt
 
-        wget -qO- --keep-session-cookies --no-check-certificate --load-cookies /tmp/pfsense_cookies.txt \
+        wget -qO- --keep-session-cookies --load-cookies /tmp/pfsense_cookies.txt \
                 --save-cookies /tmp/pfsense_cookies.txt --no-check-certificate \
                 --post-data "login=Login&usernamefld=$USERNAME&passwordfld=$PASSWORD&__csrf_magic=$(cat /tmp/pfsense_csrf.txt)" \
                 https://"$SITE":"$PORT"/system_certmanager.php | grep "name='__csrf_magic'" |
@@ -59,18 +59,18 @@ else
         if [ -e /tmp/pfsense_cookies.txt ]; then
 
                 FILENAME="$DIRALTA/$HOST.crt"
-                wget --keep-session-cookies --no-check-certificate --load-cookies /tmp/pfsense_cookies.txt --no-check-certificate \
+                wget --keep-session-cookies --load-cookies /tmp/pfsense_cookies.txt --no-check-certificate \
                         --post-data "act=exp&id=$ID&__csrf_magic=$(head -n 1 /tmp/pfsense_csrf2.txt)" \
                         https://"$SITE":"$PORT"/system_certmanager.php -O "$FILENAME"
 
                 FILENAME2="$DIRALTA/$HOST.key"
-                wget --keep-session-cookies --no-check-certificate --load-cookies /tmp/pfsense_cookies.txt --no-check-certificate \
+                wget --keep-session-cookies --load-cookies /tmp/pfsense_cookies.txt --no-check-certificate \
                         --post-data "act=key&id=$ID&__csrf_magic=$(head -n 1 /tmp/pfsense_csrf2.txt)" \
                         https://"$SITE":"$PORT"/system_certmanager.php -O "$FILENAME2"
 
                 FILENAME3="$DIRALTA/$HOST.ca"
                 FILENAME4="$DIRALTA/$HOST.ca2"
-                wget --keep-session-cookies --no-check-certificate --load-cookies /tmp/pfsense_cookies.txt --no-check-certificate \
+                wget --keep-session-cookies --load-cookies /tmp/pfsense_cookies.txt --no-check-certificate \
                         --post-data "act=exp&id=$IDCA&__csrf_magic=$(head -n 1 /tmp/pfsense_csrf2.txt)" \
                         https://"$SITE":"$PORT"/system_camanager.php -O "$FILENAME3"
                 grep "\S" "$FILENAME3" >"$FILENAME4"
@@ -81,7 +81,6 @@ else
                 rm -f /tmp/pfsense_csrf2.txt
 
         else
-                clear
                 echo "\e[0;31m[VPN]: Fallo la obtencion de certificado en https://$SITE:$PORT \e[0m"
         fi
 
@@ -121,10 +120,13 @@ else
                         echo "@reboot /usr/local/sbin/check_vpn"
                 } >>/var/spool/cron/crontabs/root
                 systemctl restart cron.service
+
+                #Ejemplo para Windows
+                #openssl pkcs12 -export -out cert.p12 -inkey cert.key -in cert.crt -certfile CACert.crt -name ""$SITE"" -passout pass:$CERTPASS
         else
-                clear
                 echo -e "\e[0;31m[VPN]: \e[0mOcurrio una falla al intentar descargar el certificado correspondiente.\e[0m"
                 rm $HOST*
+                exit
         fi
 
         sleep 5

@@ -18,4 +18,5 @@ git clone https://github.com/avillalba96/script-altacertificadovpn.git && cd "$(
 User - Config: Deny Config Write
 WebCfg - System: CA Manager
 WebCfg - System: Certificate Manager
+WebCfg - Dashboard (all)
 ```
