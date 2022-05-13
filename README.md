@@ -20,7 +20,3 @@ WebCfg - System: CA Manager
 WebCfg - System: Certificate Manager
 WebCfg - Dashboard (all)
 ```
-
-## **TAREAS**
-
-* verificar que funcione con "apt-get" y que existe el "/etc/openvpn/client/"
