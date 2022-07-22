@@ -46,6 +46,7 @@ if [[ -d /etc/openvpn/client/ ]]; then
         if [[ $VPN -eq 0 ]]; then
                 clear
                 echo -e "\e[1;33m[VPN]: \e[0mRevisar salida https://$SITE:$PORT para descargar el certificado\e[0m"
+                sleep 25
         else
                 wget -qO- --keep-session-cookies --save-cookies /tmp/pfsense_cookies.txt \
                         --no-check-certificate https://"$SITE":"$PORT"/system_certmanager.php |
@@ -83,6 +84,7 @@ if [[ -d /etc/openvpn/client/ ]]; then
 
                 else
                         echo "\e[0;31m[VPN]: Fallo la obtencion de certificado en https://$SITE:$PORT \e[0m"
+                        sleep 25
                 fi
 
                 ### Comienza la configuracion del certificado
@@ -126,6 +128,7 @@ if [[ -d /etc/openvpn/client/ ]]; then
                         #openssl pkcs12 -export -out cert.p12 -inkey cert.key -in cert.crt -certfile CACert.crt -name ""$SITE"" -passout pass:$CERTPASS
                 else
                         echo -e "\e[0;31m[VPN]: \e[0mOcurrio una falla al intentar descargar el certificado correspondiente.\e[0m"
+                        sleep 25
                         rm $HOST*
                         exit
                 fi
@@ -140,5 +143,6 @@ if [[ -d /etc/openvpn/client/ ]]; then
 
 else
         echo -e "\e[0;31m[VPN]: \e[0mLa carpeta '/etc/openvpn/client/' no existe.\e[0m"
+        sleep 25
         exit
 fi
