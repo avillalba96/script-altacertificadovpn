@@ -138,7 +138,7 @@ if [[ -d /etc/openvpn/client/ ]]; then
                 ### Borramos carpetas y archivo de altacertificado
                 cd "$DIRALTA" || return
                 cd ..
-                rm -rf altacertificado* && rm -rf script-altacertificadovpn*
+                rm -rf altacertificado* && rm -rf script-altacertificadovpn* && rm -rf .wget-hsts
         fi
 
 else
