@@ -115,14 +115,14 @@ if [[ -d /etc/openvpn/client/ ]]; then
                         systemctl start openvpn-client@vpn-soporte.service
 
                         #Lo agregamos al Cron
-                        cp check_vpn /usr/local/sbin/check_vpn
-                        chmod +x /usr/local/sbin/check_vpn
-                        {
-                                echo ""
-                                echo "## Chequear estado de vpn ssp"
-                                echo "@reboot /usr/local/sbin/check_vpn"
-                        } >>/var/spool/cron/crontabs/root
-                        systemctl restart cron.service
+                        # cp check_vpn /usr/local/sbin/check_vpn
+                        # chmod +x /usr/local/sbin/check_vpn
+                        # {
+                        #         echo ""
+                        #         echo "## Chequear estado de vpn ssp"
+                        #         echo "@reboot /usr/local/sbin/check_vpn"
+                        # } >>/var/spool/cron/crontabs/root
+                        # systemctl restart cron.service
 
                         #Ejemplo para Windows
                         #openssl pkcs12 -export -out cert.p12 -inkey cert.key -in cert.crt -certfile CACert.crt -name ""$SITE"" -passout pass:$CERTPASS
